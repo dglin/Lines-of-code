@@ -2,20 +2,20 @@ import os
 import sys
 
 extensions = {
-	'.py'   : ('Python'       , '#'  ),
-	'.c'    : ('C'            , '//' ),
-	'.cpp'  : ('C++'          , '//' ),
-	'.cs'   : ('C#'           , '///'),
-	'.java' : ('Java'         , '//' ),
-	'.jar'  : ('Java'         , '//' ),
-	'.class': ('Java'         , '//' ),
-	'.js'   : ('JavaScript'   , '//' ),
-	'.m'    : ('Objective-C'  , '//' ),
-	'.r'    : ('R'            , '#'  ),
-	'.swift': ('Swift'        , '//' ),
-	'.rb'   : ('Ruby'         , '#'  ),
-	'.rbw'  : ('Ruby'         , '#'  ),
-	'.sh'   : ('Bash'         , '#'  )
+	'.py'   : ('Python'       , '#'   ,  '/*'  ,  '*/' ),
+	'.c'    : ('C'            , '//'  ,  '/*'  ,  '*/' ),
+	'.cpp'  : ('C++'          , '//'  ,  '/*'  ,  '*/' ),
+	'.cs'   : ('C#'           , '///' ,  '/*'  ,  '*/' ),
+	'.java' : ('Java'         , '//'  ,  '/*'  ,  '*/' ),
+	'.jar'  : ('Java'         , '//'  ,  '/*'  ,  '*/' ),
+	'.class': ('Java'         , '//'  ,  '/*'  ,  '*/' ),
+	'.js'   : ('JavaScript'   , '//'  ,  '/*'  ,  '*/' ),
+	'.m'    : ('Objective-C'  , '//'  ,  '/*'  ,  '*/' ),
+	'.r'    : ('R'            , '#'   ,  '/*'  ,  '*/' ),
+	'.swift': ('Swift'        , '//'  ,  '/*'  ,  '*/' ),
+	'.rb'   : ('Ruby'         , '#'   ,  '/*'  ,  '*/' ),
+	'.rbw'  : ('Ruby'         , '#'   ,  '/*'  ,  '*/' ),
+	'.sh'   : ('Bash'         , '#'   ,  '/*'  ,  '*/' )
 }
 
 def countedLine(line,comment):
@@ -29,11 +29,22 @@ def countedLine(line,comment):
 		if token == comment:
 			return 0
 
-def count(path,comment):
+def count(path,comment,lcomment,rcomment):
 	lines = open(path, 'r')
 	count = 0
+	flag = True
 	for line in lines:
-		if countedLine(line,comment):
+		if lcomment in line:
+			print str(1)
+			flag = False
+			if line[len(line) - len(line.lstrip()):] != lcomment[0]:
+				count = count + 1
+		elif rcomment in line and flag == False:
+			flag = True
+			if line.index(rcomment) + len(rcomment) < len(line) - 2:
+				count = count + 1
+		elif flag and countedLine(line,comment) and flag:
+			print str(3)
 			count = count + 1
 	return count
 
@@ -51,7 +62,7 @@ def traverse(args,cwd,flags):
 					print path
 				if extensions[ext][0] not in myDict:
 					myDict[extensions[ext][0]] = 0
-				myDict[extensions[ext][0]] += count(path,extensions[ext][1])
+				myDict[extensions[ext][0]] += count(path,extensions[ext][1],extensions[ext][2],extensions[ext][3])
 	return myDict
 
 def printDict(dictionary,cwd):
