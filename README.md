@@ -10,3 +10,19 @@ usage: python ploc.py -{options} {target directory}
 options currently are -v, which prints the directory path as it is read
 					  -c, which prints the count of each directory
 					  -d, debug which prints out all counted lines
+
+Languages currently:
+
+Python
+C
+C++
+C#
+Java
+JavaScript
+Objective-C
+R
+Swift
+Ruby
+Bash
+HTML
+CSS
